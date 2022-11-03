@@ -1,56 +1,25 @@
 const express = require('express');
 const cors = require('cors');
+const bodyparser = require('body-parser');
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
+    this.usariosPath = '/api/users'
 
     this.middlewares();
     this.routes();
   }
 
   middlewares() {
-
     this.app.use(cors());
+    this.app.use(bodyparser.json({limit: '50mb'}))
     this.app.use(express.static('public'))
   }
 
   routes() {
-    // METHOD GET
-    this.app.get('/api', (req, res) => {
-      res.json({
-        msg: 'get API'
-      });
-    });    
-
-    // METHOD PUT
-    this.app.put('/api', (req, res) => {
-      res.json({
-        msg: 'put API'
-      });
-    });    
-
-    // METHOD POST
-    this.app.post('/api', (req, res) => {
-      res.json({
-        msg: 'post API'
-      });
-    });    
-
-    // METHOD DELETE
-    this.app.delete('/api', (req, res) => {
-      res.json({
-        msg: 'delete API'
-      });
-    });
-
-    // METHOD PATCH
-    this.app.patch('/api', (req, res) => {
-      res.json({
-        msg: 'patch API'
-      });
-    });    
+    this.app.use(this.usariosPath, require('../routes/user') )
   }
 
   listen() {
